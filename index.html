@@ -186,8 +186,8 @@ footer{position:relative;z-index:1;border-top:1px solid var(--line);padding-bloc
 .cur-dot,.cur-petals,.cur-halo{position:fixed;top:0;left:0;pointer-events:none;opacity:0;transition:opacity .3s}
 .cur-dot{z-index:9999;width:10px;height:10px;border-radius:50%;background:#22d3ee;mix-blend-mode:screen}
 .cur-petals{z-index:9998;width:36px;height:36px}
-.cur-petals i{position:absolute;left:50%;top:50%;width:8px;height:16px;border-radius:999px;background:rgba(59,130,246,.4);box-shadow:0 0 12px rgba(56,189,248,.35);transform:translate(-50%,-50%) rotate(var(--r)) translateY(-10px)}
-.cur-halo{z-index:9997;width:48px;height:48px;border-radius:50%;background:rgba(59,130,246,.1);border:1px solid rgba(59,130,246,.4);filter:blur(2px)}
+.cur-petals i{position:absolute;left:50%;top:50%;width:8px;height:16px;border-radius:999px;background:rgba(59,130,246,.55);box-shadow:0 0 12px rgba(56,189,248,.55);transform:translate(-50%,-50%) rotate(var(--r)) translateY(-10px)}
+.cur-halo{z-index:9997;width:48px;height:48px;border-radius:50%;background:rgba(59,130,246,.22);border:1px solid rgba(96,165,250,.55);box-shadow:0 0 22px 4px rgba(59,130,246,.45);filter:blur(2px)}
 body.cur-on .cur-dot,body.cur-on .cur-petals{opacity:1}
 body.cur-on .cur-halo{opacity:.6}
 body.cur-on.cur-hot .cur-halo{opacity:.9}
@@ -434,11 +434,11 @@ const mk=c=>{const d=document.createElement('div');d.className=c;document.body.a
 const dot=mk('cur-dot'),pet=mk('cur-petals'),halo=mk('cur-halo');
 pet.innerHTML=[0,45,90,135,180,225,270,315].map(r=>`<i style="--r:${r}deg"></i>`).join('');
 let mx=-100,my=-100,dx=mx,dy=my,px=mx,py=my,hx=mx,hy=my,hot=false,ds=1,ps=1,pr=0,hs=1;
-addEventListener('pointermove',e=>{mx=e.clientX;my=e.clientY;document.body.classList.add('cur-on');
+addEventListener('pointermove',e=>{mx=e.clientX;my=e.clientY;dot.style.transform=`translate3d(${mx-5}px,${my-5}px,0) scale(${ds})`;document.body.classList.add('cur-on');
   hot=!!e.target.closest('a,button,.proj,.skill,.cert,.way,input,textarea');document.body.classList.toggle('cur-hot',hot)},{passive:true});
 document.addEventListener('mouseleave',()=>document.body.classList.remove('cur-on'));
-(function tick(){dx+=(mx-dx)*.6;dy+=(my-dy)*.6;px+=(mx-px)*.22;py+=(my-py)*.22;hx+=(mx-hx)*.12;hy+=(my-hy)*.12;
-  ds+=((hot?1.8:1)-ds)*.18;ps+=((hot?1.2:1)-ps)*.15;pr+=((hot?360:0)-pr)*.09;hs+=((hot?1.4:1)-hs)*.15;
+(function tick(){dx=mx;dy=my;px+=(mx-px)*.45;py+=(my-py)*.45;hx+=(mx-hx)*.2;hy+=(my-hy)*.2;
+  ds+=((hot?1.8:1)-ds)*.3;ps+=((hot?1.2:1)-ps)*.25;pr+=((hot?360:0)-pr)*.14;hs+=((hot?1.4:1)-hs)*.25;
   dot.style.transform=`translate3d(${dx-5}px,${dy-5}px,0) scale(${ds})`;
   pet.style.transform=`translate3d(${px-18}px,${py-18}px,0) scale(${ps}) rotate(${pr}deg)`;
   halo.style.transform=`translate3d(${hx-24}px,${hy-24}px,0) scale(${hs})`;requestAnimationFrame(tick)})();
