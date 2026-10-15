@@ -84,7 +84,7 @@ h2{font:800 clamp(30px,3.6vw,44px)/1.15 var(--sans);letter-spacing:-.025em;margi
 /* projects */
 .grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:32px}
 .proj{display:flex;flex-direction:column;padding:24px;transition:transform .25s,border-color .25s,background .25s;min-width:0}
-.proj:hover{transform:translateY(-4px);border-color:rgba(59,130,246,.35);background:var(--card2)}
+.proj:hover{border-color:rgba(59,130,246,.35);background:var(--card2)}
 .proj-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:22px}
 .proj .ibox{background:rgba(59,130,246,.1);border-color:rgba(59,130,246,.25)}
 .icon-link{display:flex;gap:12px}
@@ -180,6 +180,39 @@ footer{position:relative;z-index:1;border-top:1px solid var(--line);padding-bloc
   *{animation:none!important;transition:none!important;scroll-behavior:auto!important}
   .reveal.pre{opacity:1;transform:none}
 }
+
+/* ---- hover effects ---- */
+.cur-dot,.cur-petals,.cur-halo{position:fixed;top:0;left:0;pointer-events:none;border-radius:50%;opacity:0;transition:opacity .3s}
+.cur-dot{z-index:9999;width:10px;height:10px;margin:-5px 0 0 -5px;background:var(--cyan);mix-blend-mode:screen;box-shadow:0 0 12px 3px rgba(34,211,238,.7)}
+.cur-petals{z-index:9998;width:36px;height:36px;margin:-18px 0 0 -18px}
+.cur-petals i{position:absolute;left:50%;top:50%;width:8px;height:16px;border-radius:999px;background:rgba(59,130,246,.4);box-shadow:0 0 8px rgba(59,130,246,.6);transform:translate(-50%,-50%) rotate(var(--r)) translateY(-10px);transition:transform .3s cubic-bezier(.2,0,0,1),background .3s}
+.cur-petals .spin{position:absolute;inset:0;animation:spin 6s linear infinite}
+.cur-halo{z-index:9997;width:48px;height:48px;margin:-24px 0 0 -24px;background:rgba(59,130,246,.1);border:1px solid rgba(59,130,246,.4);filter:blur(2px);transition:opacity .3s,width .3s,height .3s,margin .3s}
+@keyframes spin{to{transform:rotate(360deg)}}
+body.cur-on .cur-dot,body.cur-on .cur-petals{opacity:1}
+body.cur-on .cur-halo{opacity:.6}
+body.cur-hot .cur-petals i{transform:translate(-50%,-50%) rotate(var(--r)) translateY(-17px);background:rgba(34,211,238,.55)}
+body.cur-hot .cur-halo{width:72px;height:72px;margin:-36px 0 0 -36px;opacity:.85}
+body.cur-hot .cur-dot{transform:scale(.6)}
+/* photo tilt + name tag */
+.photo{perspective:1000px}
+.photo .tilt{transition:transform .25s ease;transform-style:preserve-3d;will-change:transform}
+.photo .tag{position:absolute;left:16px;right:16px;bottom:16px;z-index:2;padding:12px 16px;border-radius:12px;background:rgba(15,23,42,.6);border:1px solid var(--line2);backdrop-filter:blur(10px);text-align:left;opacity:0;transform:translateY(14px);transition:opacity .35s,transform .35s}
+.photo .tag b{display:block;font:700 15px var(--sans)}
+.photo .tag span{display:flex;align-items:center;gap:8px;font:500 12px var(--mono);color:#7dd3fc;margin-top:2px}
+.photo .tag span:before{content:"";width:7px;height:7px;border-radius:50%;background:#34d399;box-shadow:0 0 8px #34d399}
+.photo:hover .tag,.photo:focus-within .tag{opacity:1;transform:none}
+/* spotlight cards */
+.card,.skill{position:relative;overflow:hidden}
+.card:before,.skill:before{content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;opacity:0;transition:opacity .3s;background:radial-gradient(420px circle at var(--mx,50%) var(--my,50%),rgba(59,130,246,.14),transparent 45%)}
+.card:hover:before,.skill:hover:before{opacity:1}
+.card>*,.skill>*{position:relative}
+.proj{transform-style:preserve-3d;will-change:transform}
+.chips span,.tags span{transition:border-color .2s,color .2s,transform .2s}
+.chips span:hover,.tags span:hover{border-color:rgba(34,211,238,.5);color:#fff;transform:translateY(-2px)}
+.btn{will-change:transform}
+@media (hover:none),(pointer:coarse){.cur-dot,.cur-petals,.cur-halo{display:none}}
+@media (prefers-reduced-motion:reduce){.cur-dot,.cur-petals,.cur-halo{display:none}.photo .tilt,.proj{transform:none!important}}
 </style>
 </head>
 <body>
@@ -207,7 +240,8 @@ footer{position:relative;z-index:1;border-top:1px solid var(--line);padding-bloc
 <main class="wrap">
   <section class="hero" id="home">
     <div class="photo">
-      <div class="frame"><img src="https://avatars.githubusercontent.com/u/217486949?v=4&s=1200" alt="Pooja K Kochalapurmath" width="440" height="440"></div>
+      <div class="tilt"><div class="frame"><img src="https://avatars.githubusercontent.com/u/217486949?v=4&s=1200" alt="Pooja K Kochalapurmath" width="440" height="440"></div>
+      <div class="tag"><b>Pooja K Kochalapurmath</b><span>Full Stack Developer</span></div></div>
       <div class="term" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="m5 7 5 5-5 5M12 18h7"/></svg></div>
     </div>
     <div>
@@ -392,6 +426,33 @@ function loop(){t+=.006;const a=pos.array;
   pos.needsUpdate=true;mesh.rotation.y+=.0025;mesh.rotation.x=Math.sin(t*.5)*.25;
   const y=scrollY*.0015;mesh.rotation.z=y;r.render(sc,cam);if(!reduce)requestAnimationFrame(loop)}
 loop()})();
+
+// ---------- hover effects ----------
+(()=>{const fine=matchMedia('(hover:hover) and (pointer:fine)').matches,still=matchMedia('(prefers-reduced-motion: reduce)').matches;
+// spotlight position on cards
+document.addEventListener('pointermove',e=>{const c=e.target.closest&&e.target.closest('.card,.skill');if(!c)return;const r=c.getBoundingClientRect();c.style.setProperty('--mx',(e.clientX-r.left)+'px');c.style.setProperty('--my',(e.clientY-r.top)+'px')},{passive:true});
+if(!fine||still)return;
+// custom cursor
+const mk=c=>{const d=document.createElement('div');d.className=c;document.body.appendChild(d);return d};
+const dot=mk('cur-dot'),pet=mk('cur-petals'),halo=mk('cur-halo');
+pet.innerHTML='<div class="spin">'+[0,45,90,135,180,225,270,315].map(r=>`<i style="--r:${r}deg"></i>`).join('')+'</div>';
+let mx=-100,my=-100,px=mx,py=my,hx=mx,hy=my;
+addEventListener('pointermove',e=>{mx=e.clientX;my=e.clientY;document.body.classList.add('cur-on');
+  document.body.classList.toggle('cur-hot',!!e.target.closest('a,button,.proj,.skill,.cert,.way,input,textarea'))},{passive:true});
+document.addEventListener('mouseleave',()=>document.body.classList.remove('cur-on'));
+(function tick(){px+=(mx-px)*.35;py+=(my-py)*.35;hx+=(mx-hx)*.12;hy+=(my-hy)*.12;
+  dot.style.transform=`translate3d(${mx}px,${my}px,0)`;pet.style.transform=`translate3d(${px}px,${py}px,0)`;halo.style.transform=`translate3d(${hx}px,${hy}px,0)`;requestAnimationFrame(tick)})();
+// photo tilt
+const ph=document.querySelector('.photo'),tl=ph&&ph.querySelector('.tilt');
+if(tl){ph.addEventListener('pointermove',e=>{const r=ph.getBoundingClientRect(),x=(e.clientX-r.left)/r.width-.5,y=(e.clientY-r.top)/r.height-.5;tl.style.transform=`rotateY(${x*14}deg) rotateX(${-y*14}deg) scale(1.02)`});
+  ph.addEventListener('pointerleave',()=>tl.style.transform='')}
+// project card tilt
+document.querySelectorAll('.proj').forEach(c=>{c.addEventListener('pointermove',e=>{const r=c.getBoundingClientRect(),x=(e.clientX-r.left)/r.width-.5,y=(e.clientY-r.top)/r.height-.5;c.style.transform=`perspective(900px) rotateY(${x*6}deg) rotateX(${-y*6}deg) translateY(-4px)`});
+  c.addEventListener('pointerleave',()=>c.style.transform='')});
+// magnetic buttons
+document.querySelectorAll('.btn').forEach(b=>{b.addEventListener('pointermove',e=>{const r=b.getBoundingClientRect();b.style.transform=`translate(${(e.clientX-r.left-r.width/2)*.18}px,${(e.clientY-r.top-r.height/2)*.3}px)`});
+  b.addEventListener('pointerleave',()=>b.style.transform='')});
+})();
 </script>
 </body>
 </html>
