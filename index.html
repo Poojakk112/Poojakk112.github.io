@@ -40,7 +40,9 @@ nav{display:flex;align-items:center;justify-content:space-between;height:60px;ga
 .hero{display:grid;grid-template-columns:minmax(0,440px) minmax(0,1fr);gap:64px;align-items:center;padding-block:72px 96px;min-height:min(calc(100svh - 60px),860px)}
 .photo{position:relative;justify-self:center;width:100%;max-width:440px}
 .photo .frame{aspect-ratio:1/1;border-radius:22px;overflow:hidden;background:#0f172a;border:1px solid var(--line2);box-shadow:0 30px 80px rgba(0,0,0,.55),0 0 0 1px rgba(59,130,246,.08)}
-.photo img{width:100%;height:100%;object-fit:cover;object-position:center 25%;display:block}
+.photo .frame{position:relative}
+.photo img{width:100%;height:100%;object-fit:cover;object-position:50% 0;display:block;transform:scale(1.6);transform-origin:47% 6%;filter:brightness(1.06) contrast(1.08) saturate(1.08)}
+.photo .frame:after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(2,6,23,0) 55%,rgba(2,6,23,.45)),radial-gradient(120% 90% at 50% 30%,transparent 60%,rgba(2,6,23,.35));pointer-events:none}
 .photo .term{position:absolute;right:-18px;top:-22px;width:56px;height:56px;border-radius:14px;display:grid;place-items:center;background:rgba(51,65,85,.8);border:1px solid var(--line2);backdrop-filter:blur(6px);box-shadow:0 10px 30px rgba(0,0,0,.4);animation:float 4s ease-in-out infinite}
 .photo .term svg{width:24px;height:24px;stroke:#93c5fd;fill:none;stroke-width:2}
 @keyframes float{50%{transform:translateY(-8px)}}
@@ -118,7 +120,13 @@ h2{font:800 clamp(30px,3.6vw,44px)/1.15 var(--sans);letter-spacing:-.025em;margi
 .cert .ibox{width:42px;height:42px}
 .cert .ibox svg{width:20px;height:20px;stroke:var(--cyan)}
 .cert b{display:block;font-weight:600}
-.cert small{color:var(--muted);font-size:14px}
+.cert small{color:var(--muted);font-size:14px;display:block}
+.cert>div:last-child{flex:1;min-width:0}
+.cert:last-child:nth-child(odd){grid-column:1/-1}
+.proof{display:inline-flex;align-items:center;gap:6px;margin-top:6px;font:600 13px var(--sans);color:#60a5fa;text-decoration:none}
+.proof:hover{color:var(--cyan)}
+.proof svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2}
+.job .proof{margin-top:16px}
 
 /* contact */
 .contact{max-width:896px;margin:0 auto;text-align:center;padding:64px 32px}
@@ -199,7 +207,7 @@ footer{position:relative;z-index:1;border-top:1px solid var(--line);padding-bloc
 <main class="wrap">
   <section class="hero" id="home">
     <div class="photo">
-      <div class="frame"><img src="profile.jpg" onerror="this.onerror=null;this.src='https://avatars.githubusercontent.com/u/217486949?v=4&s=600'" alt="Pooja K Kochalapurmath" width="440" height="440"></div>
+      <div class="frame"><img src="https://avatars.githubusercontent.com/u/217486949?v=4&s=1200" alt="Pooja K Kochalapurmath" width="440" height="440"></div>
       <div class="term" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="m5 7 5 5-5 5M12 18h7"/></svg></div>
     </div>
     <div>
@@ -227,6 +235,7 @@ footer{position:relative;z-index:1;border-top:1px solid var(--line);padding-bloc
             <li>Developed time-based booking window logic that restricts appointments relative to each doctor's consultation times.</li>
             <li>Automated appointment reminders with cron jobs in NestJS's Schedule Module and deployed the service on Render with Neon PostgreSQL.</li>
           </ul>
+          <a class="proof" href="https://drive.google.com/file/d/1Qj2Da1XN4EOvTo8geG1Ny5uy5otjF_xb/view?usp=sharing" target="_blank" rel="noopener">View Certificate <svg viewBox="0 0 24 24"><path d="M15 3h6v6M10 14 21 3M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/></svg></a>
         </div>
       </article>
       <article class="card job">
@@ -249,6 +258,7 @@ footer{position:relative;z-index:1;border-top:1px solid var(--line);padding-bloc
             <li>Connected applications to SQL databases for data storage and retrieval.</li>
             <li>Delivered work across both frontend and backend in Agile sprint workflows.</li>
           </ul>
+          <a class="proof" href="https://drive.google.com/file/d/1hTQdrSMOlYed8kJS44zXxbT8_t1cWq1y/view?usp=sharing" target="_blank" rel="noopener">View Certificate <svg viewBox="0 0 24 24"><path d="M15 3h6v6M10 14 21 3M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/></svg></a>
         </div>
       </article>
     </div>
@@ -278,10 +288,11 @@ footer{position:relative;z-index:1;border-top:1px solid var(--line);padding-bloc
         <div class="degree-side"><span class="pill">Dec 2020 – May 2025</span><span class="cgpa">CGPA: 7.6</span></div>
       </article>
       <div class="certs">
-        <div class="card cert"><div class="ibox"><svg viewBox="0 0 24 24"><circle cx="12" cy="9" r="6"/><path d="M8.5 14 7 22l5-3 5 3-1.5-8"/></svg></div><div><b>KSCST State-Level Project Exhibition</b><small>White Blood Cancer Detection · 48th SPP</small></div></div>
+        <div class="card cert"><div class="ibox"><svg viewBox="0 0 24 24"><circle cx="12" cy="9" r="6"/><path d="M8.5 14 7 22l5-3 5 3-1.5-8"/></svg></div><div><b>KSCST State-Level Project Exhibition</b><small>White Blood Cancer Detection · 48th Student Project Programme</small><a class="proof" href="https://drive.google.com/file/d/1ucHZoMqGwsJQKiLzrpZuysH-7Vf4ln8r/view?usp=sharing" target="_blank" rel="noopener">View Certificate <svg viewBox="0 0 24 24"><path d="M15 3h6v6M10 14 21 3M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/></svg></a></div></div>
+        <div class="card cert"><div class="ibox"><svg viewBox="0 0 24 24"><circle cx="12" cy="9" r="6"/><path d="M8.5 14 7 22l5-3 5 3-1.5-8"/></svg></div><div><b>Backend Developer Internship</b><small>PearlThoughts · Jun 2026 – Jul 2026</small><a class="proof" href="https://drive.google.com/file/d/1Qj2Da1XN4EOvTo8geG1Ny5uy5otjF_xb/view?usp=sharing" target="_blank" rel="noopener">View Certificate <svg viewBox="0 0 24 24"><path d="M15 3h6v6M10 14 21 3M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/></svg></a></div></div>
+        <div class="card cert"><div class="ibox"><svg viewBox="0 0 24 24"><circle cx="12" cy="9" r="6"/><path d="M8.5 14 7 22l5-3 5 3-1.5-8"/></svg></div><div><b>Application Developer – Web &amp; Mobile</b><small>Rooman Technologies · Sep 2024 – Feb 2025</small><a class="proof" href="https://drive.google.com/file/d/1hTQdrSMOlYed8kJS44zXxbT8_t1cWq1y/view?usp=sharing" target="_blank" rel="noopener">View Certificate <svg viewBox="0 0 24 24"><path d="M15 3h6v6M10 14 21 3M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/></svg></a></div></div>
         <div class="card cert"><div class="ibox"><svg viewBox="0 0 24 24"><circle cx="12" cy="9" r="6"/><path d="M8.5 14 7 22l5-3 5 3-1.5-8"/></svg></div><div><b>Java Full Stack with React.js</b><small>JSpiders Training &amp; Development Center</small></div></div>
-        <div class="card cert"><div class="ibox"><svg viewBox="0 0 24 24"><circle cx="12" cy="9" r="6"/><path d="M8.5 14 7 22l5-3 5 3-1.5-8"/></svg></div><div><b>Backend Developer Internship</b><small>PearlThoughts</small></div></div>
-        <div class="card cert"><div class="ibox"><svg viewBox="0 0 24 24"><circle cx="12" cy="9" r="6"/><path d="M8.5 14 7 22l5-3 5 3-1.5-8"/></svg></div><div><b>Introduction to Cloud</b><small>IBM Skills Network</small></div></div>
+        <div class="card cert"><div class="ibox"><svg viewBox="0 0 24 24"><circle cx="12" cy="9" r="6"/><path d="M8.5 14 7 22l5-3 5 3-1.5-8"/></svg></div><div><b>Introduction to Cloud</b><small>IBM Skills Network · Feb 2025</small></div></div>
       </div>
     </div>
   </section>
